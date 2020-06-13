@@ -1,6 +1,6 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import cors from "cors";
+import * as cors from "cors";
 import routes from "./routes";
 import { createConnection } from "typeorm";
 
