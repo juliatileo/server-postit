@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import cors from "cors";
@@ -7,6 +6,7 @@ import { createConnection } from "typeorm";
 
 const app = express();
 createConnection();
+app.use(cors());
 app.use(bodyParser.json());
 app.use(routes);
 
