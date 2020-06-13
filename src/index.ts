@@ -7,7 +7,6 @@ import { createConnection } from "typeorm";
 
 const app = express();
 createConnection();
-app.use(cors());
 app.use(bodyParser.json());
 app.use(routes);
 
