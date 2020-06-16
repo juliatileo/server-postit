@@ -29,6 +29,7 @@ class Posts {
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: "userId" })
   users: User;
+
   @OneToMany(() => Comments, (comments) => comments.posts)
   comments: Comments[];
 

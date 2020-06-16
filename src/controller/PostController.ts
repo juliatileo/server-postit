@@ -6,6 +6,7 @@ import {
 } from "typeorm";
 import Posts from "../entity/Posts";
 import Comments from "../entity/Comments";
+import User from "../entity/User";
 import { Request, Response } from "express";
 
 class PostController {
@@ -40,8 +41,13 @@ class PostController {
     try {
       const { id } = req.params;
       const posts: Posts = await getRepository(Posts).findOne(id);
+      const user = await getRepository(User)
+        .createQueryBuilder("user")
+        .where("user.id = :id", { id: posts.userId })
+        .getOne();
       if (!posts) return res.status(404).json({ error: "post not found" });
-      return res.json(posts);
+      user.password = undefined;
+      return res.json({ posts, user });
     } catch (err) {
       res.status(400).json(err);
     }

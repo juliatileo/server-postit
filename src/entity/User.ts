@@ -22,8 +22,10 @@ class User {
 
   @Column()
   password: string;
+
   @OneToMany(() => Posts, (posts) => posts.users)
   posts: Posts[];
+
   @OneToMany(() => Comments, (comments) => comments.users)
   comments: Comments[];
   @CreateDateColumn()
