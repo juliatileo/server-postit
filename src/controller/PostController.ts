@@ -24,7 +24,8 @@ class PostController {
     try {
       const posts: Posts[] = await getRepository(Posts)
         .createQueryBuilder("p")
-        .orderBy("cookies", "DESC")
+        .leftJoinAndSelect("p.users", "u")
+        .orderBy("p.cookies", "DESC")
         .getMany();
       return res.json(posts);
     } catch (err) {
