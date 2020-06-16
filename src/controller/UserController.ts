@@ -1,7 +1,5 @@
 import { getRepository, createQueryBuilder } from "typeorm";
 import User from "../entity/User";
-import Posts from "../entity/Posts";
-import Comments from "../entity/Comments";
 import { Request, Response, NextFunction } from "express";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
@@ -11,38 +9,19 @@ class UserController {
   async show(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const user: User = await getRepository(User).findOne(id);
+      const user: User = await getRepository(User)
+        .createQueryBuilder("u")
+        .leftJoinAndSelect("u.posts", "p")
+        .where("u.id = :id", { id })
+        .leftJoinAndSelect("u.comments", "c")
+        .where("u.id = :id", { id })
+        .orderBy("p.created_at", "DESC")
+        .getOne();
       if (!user) return res.status(404).json({ error: "user not found" });
       user.password = undefined;
       return res.json(user);
     } catch (err) {
       next(err);
-    }
-  }
-  async userPosts(req: Request, res: Response) {
-    try {
-      const { id } = req.params;
-      const posts: Posts[] = await getRepository(Posts)
-        .createQueryBuilder("posts")
-        .where("posts.userId = :id", { id })
-        .orderBy("created_at", "DESC")
-        .getMany();
-      return res.json(posts);
-    } catch (err) {
-      return res.status(400).json(err);
-    }
-  }
-  async userComments(req: Request, res: Response) {
-    try {
-      const { id } = req.params;
-      const comments: Comments[] = await getRepository(Comments)
-        .createQueryBuilder("comments")
-        .where("comments.userId = :id", { id })
-        .orderBy("created_at", "DESC")
-        .getMany();
-      return res.json(comments);
-    } catch (err) {
-      return res.status(400).json(err);
     }
   }
   async create(req: Request, res: Response, next: NextFunction) {

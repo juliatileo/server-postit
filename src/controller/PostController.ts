@@ -5,34 +5,27 @@ import {
   DeleteResult,
 } from "typeorm";
 import Posts from "../entity/Posts";
-import Comments from "../entity/Comments";
-import User from "../entity/User";
 import { Request, Response } from "express";
 
 class PostController {
   async index(req: Request, res: Response) {
-    const posts: Posts[] = await getRepository(Posts)
-      .createQueryBuilder("posts")
-      .orderBy("created_at", "DESC")
-      .getMany();
-    return res.json(posts);
-  }
-  async popular(req: Request, res: Response) {
-    const posts: Posts[] = await getRepository(Posts)
-      .createQueryBuilder("posts")
-      .orderBy("cookies", "DESC")
-      .getMany();
-    return res.json(posts);
-  }
-  async postComments(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-      const comments = await getRepository(Comments)
-        .createQueryBuilder("comments")
-        .where("comments.postId = :id", { id })
+      const posts: Posts[] = await getRepository(Posts)
+        .createQueryBuilder("p")
         .orderBy("created_at", "DESC")
         .getMany();
-      return res.status(200).json(comments);
+      return res.json(posts);
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  }
+  async popular(req: Request, res: Response) {
+    try {
+      const posts: Posts[] = await getRepository(Posts)
+        .createQueryBuilder("p")
+        .orderBy("cookies", "DESC")
+        .getMany();
+      return res.json(posts);
     } catch (err) {
       res.status(400).json(err);
     }
@@ -40,14 +33,14 @@ class PostController {
   async show(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const posts: Posts = await getRepository(Posts).findOne(id);
-      const user = await getRepository(User)
-        .createQueryBuilder("user")
-        .where("user.id = :id", { id: posts.userId })
+      const posts: Posts = await getRepository(Posts)
+        .createQueryBuilder("p")
+        .leftJoinAndSelect("p.comments", "c")
+        .where("p.id = :id", { id })
+        .orderBy("c.created_at", "DESC")
         .getOne();
       if (!posts) return res.status(404).json({ error: "post not found" });
-      user.password = undefined;
-      return res.json({ posts, user });
+      return res.json(posts);
     } catch (err) {
       res.status(400).json(err);
     }
@@ -56,13 +49,13 @@ class PostController {
     try {
       const { title, content, userId } = req.body;
       const cookies: number = 0;
-      const user = await getRepository(Posts).save({
+      const posts = await getRepository(Posts).save({
         title,
         content,
         cookies,
         userId,
       });
-      return res.status(201).json(user);
+      return res.status(201).json(posts);
     } catch (err) {
       res.status(400).json(err);
     }
