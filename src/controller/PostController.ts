@@ -12,7 +12,8 @@ class PostController {
     try {
       const posts: Posts[] = await getRepository(Posts)
         .createQueryBuilder("p")
-        .orderBy("created_at", "DESC")
+        .leftJoinAndSelect("p.users", "u")
+        .orderBy("p.created_at", "DESC")
         .getMany();
       return res.json(posts);
     } catch (err) {
