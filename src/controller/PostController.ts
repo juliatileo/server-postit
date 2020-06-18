@@ -78,6 +78,20 @@ class PostController {
       res.status(400).json(err);
     }
   }
+  async addCookies(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const posts = await getRepository(Posts).findOne(id);
+      if (!posts) return res.status(400).json({ error: "post not found" });
+      const addCookies = await getRepository(Posts).update(id, {
+        cookies: posts.cookies + 1,
+      });
+      return res.status(200).json({ sucess: "post updated" });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json(err);
+    }
+  }
   async delete(req: Request, res: Response) {
     try {
       const { id } = req.params;
