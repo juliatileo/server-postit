@@ -38,6 +38,7 @@ class PostController {
       const posts: Posts = await getRepository(Posts)
         .createQueryBuilder("p")
         .leftJoinAndSelect("p.comments", "c")
+        .leftJoinAndSelect("p.users", "u")
         .where("p.id = :id", { id })
         .orderBy("c.created_at", "DESC")
         .getOne();
