@@ -21,6 +21,7 @@ routes.put("/posts/:id", auth, postController.update);
 routes.put("/post/cookies/:id", auth, postController.addCookies);
 
 // Comments
+routes.get("/comments/:id", auth, commentController.index);
 routes.post("/comments", auth, commentController.create);
 routes.delete("/comments/:id", auth, commentController.delete);
 routes.put("/comments/:id", auth, commentController.update);

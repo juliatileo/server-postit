@@ -10,9 +10,11 @@ import { Request, Response } from "express";
 class CommentController {
   async index(req: Request, res: Response) {
     try {
+      const { id } = req.params;
       const comments = await getRepository(Comments)
-        .createQueryBuilder("comments")
-        .orderBy("created_at", "DESC")
+        .createQueryBuilder("c")
+        .leftJoinAndSelect("c.users", "u", "c.userId = u.id")
+        .where("c.postId = :id", { id })
         .getMany();
       return res.json(comments);
     } catch (err) {
