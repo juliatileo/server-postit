@@ -30,7 +30,9 @@ class Posts {
   @JoinColumn({ name: "userId" })
   users: User;
 
-  @OneToMany(() => Comments, (comments) => comments.posts)
+  @OneToMany(() => Comments, (comments) => comments.posts, {
+    cascade: true,
+  })
   comments: Comments[];
 
   @CreateDateColumn()
