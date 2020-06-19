@@ -17,14 +17,12 @@ routes.get("/posts/popular", auth, postController.popular);
 routes.get("/posts/:id", auth, postController.show);
 routes.post("/posts", auth, postController.create);
 routes.delete("/posts/:id", auth, postController.delete);
-routes.put("/posts/:id", auth, postController.update);
 routes.put("/post/cookies/:id", auth, postController.addCookies);
 
 // Comments
 routes.get("/comments/:id", auth, commentController.index);
 routes.post("/comments", auth, commentController.create);
 routes.delete("/comments/:id", auth, commentController.delete);
-routes.put("/comments/:id", auth, commentController.update);
 routes.put("/comments/cookies/:id", auth, commentController.addCookies);
 
 export default routes;

@@ -63,21 +63,6 @@ class PostController {
       res.status(400).json(err);
     }
   }
-  async update(req: Request, res: Response) {
-    try {
-      const { id } = req.params;
-      const { title, content } = req.body;
-      const posts: UpdateResult = await getRepository(Posts).update(id, {
-        title,
-        content,
-      });
-      if (posts.affected == 0)
-        return res.status(404).json({ error: "post not found" });
-      return res.status(200).json({ sucess: "post updated" });
-    } catch (err) {
-      res.status(400).json(err);
-    }
-  }
   async addCookies(req: Request, res: Response) {
     try {
       const { id } = req.params;

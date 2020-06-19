@@ -48,20 +48,6 @@ class CommentController {
       return res.status(400).json(err);
     }
   }
-  async update(req: Request, res: Response) {
-    try {
-      const { id } = req.params;
-      const { content } = req.body;
-      const comments: UpdateResult = await getRepository(Comments).update(id, {
-        content,
-      });
-      if (comments.affected == 0)
-        return res.status(404).json({ error: "comment not found" });
-      return res.status(200).json({ sucess: `comment updated` });
-    } catch (err) {
-      res.status(400).json(err);
-    }
-  }
   async addCookies(req: Request, res: Response) {
     try {
       const { id } = req.params;
