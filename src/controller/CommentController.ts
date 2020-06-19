@@ -15,6 +15,7 @@ class CommentController {
         .createQueryBuilder("c")
         .leftJoinAndSelect("c.users", "u", "c.userId = u.id")
         .where("c.postId = :id", { id })
+        .orderBy("c.created_at", "DESC")
         .getMany();
       return res.json(comments);
     } catch (err) {
@@ -59,6 +60,20 @@ class CommentController {
       return res.status(200).json({ sucess: `comment updated` });
     } catch (err) {
       res.status(400).json(err);
+    }
+  }
+  async addCookies(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const comment = await getRepository(Comments).findOne(id);
+      if (!comment) return res.status(400).json({ error: "comment not found" });
+      const addCookies = await getRepository(Comments).update(id, {
+        cookies: comment.cookies + 1,
+      });
+      return res.status(200).json({ sucess: "comment updated" });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json(err);
     }
   }
 }
