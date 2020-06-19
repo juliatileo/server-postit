@@ -15,7 +15,7 @@ class CommentController {
         .createQueryBuilder("c")
         .leftJoinAndSelect("c.users", "u", "c.userId = u.id")
         .where("c.postId = :id", { id })
-        .orderBy("c.created_at", "DESC")
+        .orderBy("c.cookies", "DESC")
         .getMany();
       return res.json(comments);
     } catch (err) {
