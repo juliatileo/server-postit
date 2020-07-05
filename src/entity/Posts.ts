@@ -6,37 +6,37 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
-} from "typeorm";
-import User from "./User";
-import Comments from "./Comments";
+} from 'typeorm'
+import User from './User'
+import Comments from './Comments'
 
 @Entity()
 class Posts {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column()
-  title: string;
+  title: string
 
   @Column()
-  content: string;
+  content: string
 
   @Column()
-  cookies: number;
+  cookies: number
 
   @Column()
-  userId: number;
+  userId: number
   @ManyToOne(() => User, (user) => user.posts)
-  @JoinColumn({ name: "userId" })
-  users: User;
+  @JoinColumn({ name: 'userId' })
+  users: User
 
   @OneToMany(() => Comments, (comments) => comments.posts, {
     cascade: true,
   })
-  comments: Comments[];
+  comments: Comments[]
 
   @CreateDateColumn()
-  created_at: Date;
+  created_at: Date
 }
 
-export default Posts;
+export default Posts

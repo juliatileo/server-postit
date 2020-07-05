@@ -5,31 +5,31 @@ import {
   CreateDateColumn,
   OneToMany,
   Unique,
-} from "typeorm";
-import Posts from "./Posts";
-import Comments from "./Comments";
+} from 'typeorm'
+import Posts from './Posts'
+import Comments from './Comments'
 
 @Entity()
 class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column()
-  username: string;
+  username: string
 
   @Column({ unique: true })
-  email: string;
+  email: string
 
   @Column()
-  password: string;
+  password: string
 
   @OneToMany(() => Posts, (posts) => posts.users)
-  posts: Posts[];
+  posts: Posts[]
 
   @OneToMany(() => Comments, (comments) => comments.users)
-  comments: Comments[];
+  comments: Comments[]
   @CreateDateColumn()
-  created_at: Date;
+  created_at: Date
 }
 
-export default User;
+export default User
